@@ -1,0 +1,24 @@
+class Solution
+{
+    private:
+    int solve(int n, int x, int y, int z, vector<int>& dp) {
+        if (n == 0) return 0; // No segments needed for length 0
+        if (n < 0) return INT_MIN; // If segment length is negative, it's not a valid cut
+        
+        if (dp[n] != INT_MIN) return dp[n]; // Return memoized result
+        
+        int takex = solve(n - x, x, y, z, dp) + 1;
+        int takey = solve(n - y, x, y, z, dp) + 1;
+        int takez = solve(n - z, x, y, z, dp) + 1;
+        
+        dp[n] = max(takex,max(takey,takez));
+        return dp[n];
+    }
+    
+public:
+    // Function to find the maximum number of cuts.
+    int maximizeTheCuts(int n, int x, int y, int z) {
+        vector<int> dp(n + 1, INT_MIN);
+        int result = solve(n, x, y, z, dp);
+        return (result < 0) ? 0 : result; // Ensure no negative result is returned
+    }
