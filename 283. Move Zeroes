@@ -1,0 +1,24 @@
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        int i = 0;
+        int index = 0;
+        int zero = 0;
+
+        while(i < nums.size()){
+            if(nums[i] != 0){
+                nums[index] = nums[i];
+                index++;
+            }
+            else zero++;
+            i++;
+        }
+
+        while(zero--){
+            nums[index++] = 0;
+
+        }
+        
+
+    }
+};
