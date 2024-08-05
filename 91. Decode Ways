@@ -1,0 +1,29 @@
+class Solution {
+private:
+    int solve(int ind , vector<int>& dp , string& s){
+        if(ind == s.size()) return 1;
+        if(s[ind] == '0') return 0;
+        if(dp[ind] != -1) return dp[ind];
+
+        //For single digit : 
+        int aa = 0;
+        if(s[ind] >= '1' && s[ind] <= '9'){
+            aa = solve(ind + 1,dp , s);
+        }
+        int bb = 0;
+        //For double digit
+        if(ind + 1 < s.size() && (s[ind] == '1' || (s[ind] == '2' && s[ind + 1] >= '0' && s[ind+1] <= '6'))){
+            bb = solve(ind + 2 , dp , s);
+        }
+
+        return dp[ind] = aa + bb;
+    }
+
+public:
+    int numDecodings(string s) {
+        int n = s.size();
+        vector<int>dp(n+1,-1);
+        return solve(0 , dp , s);
+
+    }
+};
