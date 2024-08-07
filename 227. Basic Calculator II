@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int calculate(string s) {
+        int n = s.size();
+        stack<int> st; // Stack to store intermediate results
+        int num = 0;
+        char operation = '+'; // Initialize the operation to '+'
+
+        for (int i = 0; i < n; i++) {
+            char current = s[i];
+
+            if (isdigit(current)) {
+                num = (num * 10) + (current - '0');
+            }
+
+            if ((!isdigit(current) && !isspace(current)) || i == n - 1) {
+                if (operation == '+') {
+                    st.push(num);
+                } else if (operation == '-') {
+                    st.push(-num);
+                } else if (operation == '*') {
+                    int top = st.top();
+                    st.pop();
+                    st.push(top * num);
+                } else if (operation == '/') {
+                    int top = st.top();
+                    st.pop();
+                    st.push(top / num);
+                }
+                operation = current; // Update the operation
+                num = 0; // Reset num for the next number
+            }
+        }
+
+        int result = 0;
+        while (!st.empty()) {
+            result += st.top();
+            st.pop();
+        }
+        return result;
+    }
+};
