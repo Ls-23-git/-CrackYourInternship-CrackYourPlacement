@@ -1,0 +1,35 @@
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        int n = nums.size();
+        sort(nums.begin(),nums.end());
+        vector<vector<int>> ans;
+        set<vector<int>> st;
+
+        for(int i=0;i<n-3;i++){
+            for(int j=i+1;j<n-2;j++){
+                long long newTarget = (long long)target - nums[i] - nums[j];
+                int left = j+1;
+                int right = n-1;
+
+                while(left < right){
+                    if(nums[left] + nums[right] == newTarget){
+                        st.insert({nums[i],nums[j],nums[left],nums[right]});
+                        left++;
+                        right--;
+                    }
+                    else if(nums[left] + nums[right] < newTarget){
+                        left++;
+                    }
+                    else{
+                        right--;
+                    }
+                }
+            }
+        }
+        for(auto it : st){
+            ans.push_back(it);
+        }
+        return ans;
+    }
+};
