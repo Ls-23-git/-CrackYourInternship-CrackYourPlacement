@@ -1,0 +1,59 @@
+class Solution {
+public:
+    // Declare a dp array for memoization
+    int dp[35][35];
+
+    // Helper function to calculate the minimum cost to merge stones from 'start' to 'end'
+    int helper(vector<int>& stones, int start, int end, vector<int>& prefix, int k) {
+        // Base case: if there are fewer stones than needed to merge, no cost
+        if (end - start + 1 < k) {
+            return 0;
+        }
+
+        // Return already computed result
+        if (dp[start][end] != -1) {
+            return dp[start][end];
+        }
+
+        int minCost = INT_MAX;
+
+        // Partition array and calculate cost of left and right merges
+        for (int mid = start; mid < end; mid += k - 1) {
+            int leftCost = helper(stones, start, mid, prefix, k);
+            int rightCost = helper(stones, mid + 1, end, prefix, k);
+            minCost = min(minCost, leftCost + rightCost);
+        }
+
+        // Add cost of merging the whole section into one pile if possible
+        if ((end - start) % (k - 1) == 0) {
+            int totalSum = prefix[end] - (start > 0 ? prefix[start - 1] : 0);
+            minCost += totalSum;
+        }
+
+        // Store and return the computed minimum cost
+        return dp[start][end] = minCost;
+    }
+
+    // Main function to calculate the minimum cost to merge all stones into one pile
+    int mergeStones(vector<int>& stones, int k) {
+        int n = stones.size();
+
+        // Check if it's possible to merge into one pile
+        if ((n - 1) % (k - 1) != 0) {
+            return -1;
+        }
+
+        // Compute prefix sum
+        vector<int> prefix(n);
+        prefix[0] = stones[0];
+        for (int i = 1; i < n; i++) {
+            prefix[i] = prefix[i - 1] + stones[i];
+        }
+
+        // Initialize dp array with -1
+        memset(dp, -1, sizeof(dp));
+
+        // Compute and return the minimum cost to merge the entire array
+        return helper(stones, 0, n - 1, prefix, k);
+    }
+};
