@@ -1,0 +1,31 @@
+class Solution {
+private:
+    void check(int ind, int target, vector<vector<int>>& ans, vector<int>& ds,
+               vector<int>& c) {
+
+        if(target == 0){
+            ans.push_back(ds);
+            return;
+        }
+        if(ind == c.size()) {
+            return;
+        }
+
+        if (c[ind] <= target) {
+            ds.push_back(c[ind]);
+            check(ind, target - c[ind], ans, ds, c);
+            ds.pop_back();
+        }
+        check(ind + 1, target, ans, ds, c);
+    }
+
+public:
+    vector<vector<int>> combinationSum(vector<int>& c, int target) {
+        vector<vector<int>> ans;
+        vector<int> ds;
+        int ind = 0;
+
+        check(ind, target, ans, ds, c);
+        return ans;
+    }
+};
